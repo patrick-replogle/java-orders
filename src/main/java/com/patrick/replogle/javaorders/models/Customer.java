@@ -39,17 +39,18 @@ public class Customer
     public Customer(String custname,
                     String custcity,
                     String workingarea,
+                    String custcountry,
                     String grade,
                     double openingamt,
                     double receiveamt,
                     double paymentamt,
                     double outstandingamt,
                     String phone,
-                    Agent agent)
-    {
+                    Agent agent) {
         this.custname = custname;
         this.custcity = custcity;
         this.workingarea = workingarea;
+        this.custcountry = custcountry;
         this.grade = grade;
         this.openingamt = openingamt;
         this.receiveamt = receiveamt;

@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 public class AgentServicesImpl implements AgentServices
 {
     @Autowired
-    AgentRepository agenstrepos;
+    AgentRepository agentrepos;
 
     @Override
     public Agent save(Agent agent)
     {
-        return agenstrepos.save(agent);
+        return agentrepos.save(agent);
     }
 }
