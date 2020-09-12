@@ -1,5 +1,7 @@
 package com.patrick.replogle.javaorders.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +29,11 @@ public class Customer
 
     @ManyToOne
     @JoinColumn(name = "agentcode", nullable = false)
+    @JsonIgnoreProperties(value = "customers")
     private Agent agent;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value = "customer", allowSetters = true)
     private List<Order> orders = new ArrayList<>();
 
     public Customer()
@@ -159,6 +163,38 @@ public class Customer
     {
         this.phone = phone;
     }
+
+    public String getCustcountry()
+    {
+        return custcountry;
+    }
+
+    public void setCustcountry(String custcountry)
+    {
+        this.custcountry = custcountry;
+    }
+
+    public Agent getAgent()
+    {
+        return agent;
+    }
+
+    public void setAgent(Agent agent)
+    {
+        this.agent = agent;
+    }
+
+    public List<Order> getOrders()
+    {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders)
+    {
+        this.orders = orders;
+    }
+
+
 
     @Override
     public String toString()
