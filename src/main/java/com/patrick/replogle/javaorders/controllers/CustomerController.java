@@ -4,13 +4,14 @@ import com.patrick.replogle.javaorders.models.Customer;
 import com.patrick.replogle.javaorders.services.CustomerServices;
 import com.patrick.replogle.javaorders.views.OrderCounts;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -56,6 +57,49 @@ public class CustomerController
         List <OrderCounts> rtnList = customerServices.findOrderCount();
 
         return new ResponseEntity<>(rtnList, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/customer/{custid}")
+    public ResponseEntity<?> deleteCustomerById(@PathVariable long custid)
+    {
+        customerServices.delete(custid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/customer", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> addNewCustomer(@Valid @RequestBody Customer newCustomer)
+    {
+        newCustomer.setCustcode(0);
+        newCustomer = customerServices.save(newCustomer);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        URI newCustomerURI = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{customerid}")
+                .buildAndExpand(newCustomer.getCustcode())
+                .toUri();
+
+        responseHeaders.setLocation(newCustomerURI);
+
+        return new ResponseEntity<>(newCustomer, responseHeaders, HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/customer/{custid}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> updateFullCustomer(@PathVariable long custid, @Valid @RequestBody Customer updateCustomer)
+    {
+        updateCustomer.setCustcode(custid);
+
+        updateCustomer = customerServices.save(updateCustomer);
+
+        return new ResponseEntity<>(updateCustomer, HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "/customer/{custid}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> updatePartCustomer(@PathVariable long custid, @RequestBody Customer updateCustomer)
+    {
+
+        updateCustomer = customerServices.update(updateCustomer, custid);
+
+        return new ResponseEntity<>(updateCustomer, HttpStatus.OK);
     }
 }
 
