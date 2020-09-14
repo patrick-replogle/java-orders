@@ -4,6 +4,7 @@ import com.patrick.replogle.javaorders.models.Order;
 import com.patrick.replogle.javaorders.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -24,5 +25,18 @@ public class OrderServicesImpl implements OrderServices
     public Order save(Order order)
     {
         return ordersrepos.save(order);
+    }
+
+    @Transactional
+    @Override
+    public void delete(long id)
+    {
+        if (ordersrepos.findById(id).isPresent())
+        {
+            ordersrepos.deleteById(id);
+        } else
+        {
+            throw new EntityNotFoundException("Order " + id + " was not found!");
+        }
     }
 }

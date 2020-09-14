@@ -5,6 +5,7 @@ import com.patrick.replogle.javaorders.repositories.CustomerRepository;
 import com.patrick.replogle.javaorders.views.OrderCounts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
@@ -54,4 +55,16 @@ public class CustomerServicesImpl implements CustomerServices
         return custrepos.save(customer);
     }
 
+    @Transactional
+    @Override
+    public void delete(long custid)
+    {
+        if (custrepos.findById(custid).isPresent())
+        {
+            custrepos.deleteById(custid);
+        } else
+        {
+            throw new EntityNotFoundException("Customer " + custid + " not found!");
+        }
+    }
 }
