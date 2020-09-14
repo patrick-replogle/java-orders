@@ -8,5 +8,7 @@ public interface OrderServices
 
     Order save(Order order);
 
+    Order update(Order order, long id);
+
     void delete(long id);
 }

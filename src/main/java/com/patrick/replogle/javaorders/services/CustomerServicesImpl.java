@@ -78,6 +78,7 @@ public class CustomerServicesImpl implements CustomerServices
         newCustomer.setOutstandingamt(customer.getOutstandingamt());
         newCustomer.setPhone(customer.getPhone());
 
+        // agent
         Agent agent = agentrepos.findById(customer.getAgent().getAgentcode())
                 .orElseThrow(() -> new EntityNotFoundException("Agent " + customer.getAgent().getAgentname() + " not found!"));
         newCustomer.setAgent(agent);
@@ -91,7 +92,7 @@ public class CustomerServicesImpl implements CustomerServices
                     o.getAdvanceamount(),
                     newCustomer,
                     o.getOrderdescription());
-            
+
             newCustomer.getOrders().add(newOrder);
         }
 
@@ -173,7 +174,7 @@ public class CustomerServicesImpl implements CustomerServices
         {
             updateCustomer.setReceiveamt(customer.getReceiveamt());
         }
-
+        // agent
         if (customer.getAgent() != null)
         {
             Agent agent = agentrepos.findById(customer.getAgent().getAgentcode())
